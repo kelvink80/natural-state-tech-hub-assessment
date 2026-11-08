@@ -1,27 +1,16 @@
 # AI Usage Disclosure
 
-I used Microsoft Copilot and ChatGPT during this assessment to:
+I used Microsoft Copilot during this assessment to:
 
-- Review and interpret the assignment requirements.
-- Discuss potential troubleshooting approaches for the telemetry and gateway datasets.
-- Validate assumptions regarding LoRaWAN operations, monitoring strategies and field-network design.
-- Improve document structure, clarity and presentation.
+- Review and interpret assignment requirements.
+- Discuss telemetry investigation approaches.
+- Validate assumptions regarding LoRaWAN operations and monitoring.
+- Improve document structure and readability.
 - Critique and refine draft findings and recommendations.
+- Review deployment architecture and power system sizing.
 
-The following areas benefited from AI-assisted discussion:
+All technical conclusions, calculations, prioritisation decisions and final recommendations were reviewed and validated by me before submission.
 
-- Sensor network investigation methodology.
-- Prioritisation of operational issues.
-- Gateway and telemetry analysis.
-- Monitoring and alerting recommendations.
-- Deployment architecture design.
-- Power budgeting assumptions and sizing rationale.
-- Documentation structure and editing.
+## Supporting Conversation Records
 
-All findings, conclusions, calculations, prioritisation decisions and architectural recommendations were reviewed, validated and edited by me before submission.
-
-## AI Conversation Records
-
-The exported AI conversation records used during preparation are included separately within this repository.
-
-These conversations were used as collaborative analysis and review tools and not as a substitute for independent investigation and judgement.
+Supporting AI conversation transcripts used during preparation are included in `ai-transcript.md`.
