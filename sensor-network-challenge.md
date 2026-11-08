@@ -1,7 +1,6 @@
 ## Executive Summary
 
-I analysed six weeks of telemetry, gateway status data,
-device inventory records and maintenance logs.
+I analysed six weeks of telemetry, gateway status data, device inventory records and maintenance logs.
 
 The investigation identified:
 
@@ -14,6 +13,7 @@ The investigation identified:
 
 No evidence was found of widespread GPS collar failures.
 
+---
 
 ## Methodology
 
@@ -32,8 +32,9 @@ I validated observations by cross-referencing:
 - Device inventory metadata
 - Gateway status logs
 
+---
 
-## Finding 1: SM-03 probable device failure
+## Finding 1: SM-03 Probable Device Failure
 
 ### Evidence
 
@@ -45,7 +46,7 @@ The maintenance log records storm damage near Plot 3, but notes that the node wa
 
 ### Impact
 
-Loss of soil moisture visibility at Restoration Plot 3.
+Loss of soil moisture monitoring at Restoration Plot 3.
 
 ### Recommended Action
 
@@ -57,18 +58,19 @@ Priority 1 site visit:
 - Antenna inspection
 - Rejoin procedure if hardware remains healthy
 
+---
 
-## Finding 2: SM-08 prolonged outage following physical disruption
+## Finding 2: SM-08 Prolonged Outage Following Physical Disruption
 
 ### Evidence
 
-SM-08 experienced the largest reporting gap observed among the environmental monitoring nodes, with a maximum gap of approximately 56 hours between telemetry messages. This is significantly higher than the reporting behaviour observed from comparable soil moisture sensors. 【1-6c2673】
+SM-08 experienced the largest reporting gap observed among the environmental monitoring nodes, with a maximum gap of approximately 56 hours between telemetry messages. This is significantly higher than the reporting behaviour observed from comparable soil moisture sensors.
 
-The maintenance log records that SM-08 was knocked over by elephants and subsequently reinstalled on a shorter post after the original mounting post was broken. 【2-ce6cb7】
+The maintenance log records that SM-08 was knocked over by elephants and subsequently reinstalled on a shorter post after the original mounting post was broken.
 
 ### Impact
 
-The outage resulted in the loss of soil moisture observations from Restoration Plot 8 for more than two days. Extended gaps reduce confidence in trend analysis and may affect restoration monitoring activities that rely on continuous environmental measurements. 【1-6c2673】【3-876d8f】
+The outage resulted in the loss of soil moisture observations from Restoration Plot 8 for more than two days. Extended gaps reduce confidence in trend analysis and may affect restoration monitoring activities that rely on continuous environmental measurements.
 
 ### Assessment
 
@@ -80,19 +82,19 @@ This highlights wildlife interaction as a significant operational risk for field
 
 - Inspect current mounting arrangement and antenna placement.
 - Review RSSI and packet success rates following reinstallation.
-- Replace temporary mounting structure with a wildlife-resistant installation.
+- Replace temporary mounting structures with wildlife-resistant installations.
 - Introduce post-maintenance verification checks to confirm normal telemetry transmission immediately after field repairs.
 - Flag any future telemetry gaps exceeding two reporting intervals for investigation.
 
 ---
 
-## Finding 3: SM-05 operating on legacy firmware and non-standard reporting interval
+## Finding 3: SM-05 Operating on Legacy Firmware and Non-Standard Reporting Interval
 
 ### Evidence
 
-The device inventory shows SM-05 running firmware version 1.0.9, while most soil moisture monitoring nodes operate on firmware version 2.3.1. 【3-876d8f】
+The device inventory shows SM-05 running firmware version 1.0.9, while most soil moisture monitoring nodes operate on firmware version 2.3.1.
 
-Telemetry records indicate that SM-05 reports at approximately 60-minute intervals, whereas the majority of soil moisture sensors transmit approximately every 15 minutes. 【1-6c2673】【4-b229b2】
+Telemetry records indicate that SM-05 reports approximately every 60 minutes, whereas the majority of soil moisture sensors transmit every 15 minutes.
 
 ### Impact
 
@@ -113,13 +115,13 @@ The node appears healthy from a connectivity and battery perspective. The issue 
 
 ---
 
-## Finding 4: SM-07 operating on legacy firmware and non-standard reporting interval
+## Finding 4: SM-07 Operating on Legacy Firmware and Non-Standard Reporting Interval
 
 ### Evidence
 
-SM-07 is also running firmware version 1.0.9 while the remainder of the soil moisture sensor fleet primarily operates on firmware version 2.3.1. 【3-876d8f】
+SM-07 is also running firmware version 1.0.9 while the remainder of the soil moisture sensor fleet primarily operates on firmware version 2.3.1.
 
-Telemetry behaviour mirrors SM-05, with reporting occurring approximately once per hour rather than every 15 minutes. 【1-6c2673】【4-b229b2】
+Telemetry behaviour mirrors SM-05, with reporting occurring approximately once per hour rather than every 15 minutes.
 
 ### Impact
 
@@ -138,13 +140,13 @@ Finding the same behaviour on two devices running the same legacy firmware sugge
 
 ---
 
-## Finding 5: GW-01 connectivity instability
+## Finding 5: GW-01 Connectivity Instability
 
 ### Evidence
 
-Gateway status records show numerous periods where GW-01 was not fully connected to its backhaul network. Approximately 101 hourly status records indicate degraded availability or connectivity interruptions. 【5-d45b67】
+Gateway status records show numerous periods where GW-01 was not fully connected to its backhaul network. Approximately 101 hourly status records indicate degraded availability or connectivity interruptions.
 
-Maintenance records also note that GW-01 was found offline before later recovering automatically without intervention. 【2-ce6cb7】
+Maintenance records also note that GW-01 was found offline before later recovering automatically without intervention.
 
 ### Impact
 
@@ -158,10 +160,10 @@ The evidence suggests an infrastructure or backhaul reliability issue rather tha
 
 Possible contributing factors include:
 
-- Cellular network instability.
-- Gateway modem issues.
-- Intermittent power-related behaviour.
-- Environmental or antenna-related connectivity degradation.
+- Cellular network instability
+- Gateway modem issues
+- Intermittent power-related behaviour
+- Environmental or antenna-related connectivity degradation
 
 ### Recommended Action
 
@@ -174,13 +176,13 @@ Possible contributing factors include:
 
 ---
 
-## Finding 6: GW-02 reboot event
+## Finding 6: GW-02 Reboot Event
 
 ### Evidence
 
-GW-02 experienced a clear reset of its uptime counter on 21 March 2026, indicating that the gateway restarted during the observation period. 【5-d45b67】
+GW-02 experienced a clear reset of its uptime counter on 21 March 2026, indicating that the gateway restarted during the observation period.
 
-The maintenance log contains a corresponding entry stating that the field team restarted GW-02 after reports of missing data. 【2-ce6cb7】
+The maintenance log contains a corresponding entry stating that the field team restarted GW-02 after reports of missing data.
 
 ### Impact
 
@@ -190,7 +192,7 @@ Although the gateway resumed operation, unplanned restarts can indicate underlyi
 
 Telemetry and maintenance records independently confirm that the restart occurred.
 
-Because the field team reported missing data before restarting the gateway, the reboot should be treated as an operational incident rather than a routine maintenance activity.
+Because the field team reported missing data before restarting the gateway, the reboot should be treated as an operational incident rather than routine maintenance.
 
 ### Recommended Action
 
@@ -201,34 +203,42 @@ Because the field team reported missing data before restarting the gateway, the 
 - Create an automatic alert for unexpected gateway reboots.
 - Record future restart events as formal incidents for trend analysis and root-cause investigation.
 
+---
 
+## Prioritised Remediation Plan
 
 | Priority | Item | Reason |
 |-----------|--------|----------|
 | P1 | SM-03 | Complete data loss |
 | P1 | SM-08 | Multi-day outage |
-| P1 | GW-01 connectivity | Infrastructure impact |
-| P2 | GW-02 reboot analysis | Stability concern |
-| P3 | SM-05 firmware | Operational consistency |
-| P3 | SM-07 firmware | Operational consistency |
+| P1 | GW-01 Connectivity | Infrastructure-wide impact |
+| P2 | GW-02 Reboot Analysis | Stability concern |
+| P3 | SM-05 Firmware | Operational consistency |
+| P3 | SM-07 Firmware | Operational consistency |
 
+---
 
-
-## Proposed Monitoring Controls
+## Monitoring and Alerting Recommendations
 
 | Alert | Trigger |
 |---------|----------|
 | Missing telemetry | Two missed reporting intervals |
 | Gateway offline | 15 minutes |
 | Gateway disconnected | 15 minutes |
-| Battery low | <3.6 V |
+| Battery low | < 3.6 V |
 | Firmware compliance | Version mismatch |
 | Sensor anomaly | Values outside expected range |
 
-Alerting channels:
+### Alerting Channels
 
 - Email
 - Microsoft Teams
 - SMS for critical failures
 
+---
 
+## Conclusion
+
+The investigation identified a combination of device failures, configuration issues and infrastructure instability. The highest-priority actions are restoration of service for SM-03, verification of SM-08 following physical damage, and investigation of recurring GW-01 connectivity interruptions.
+
+Beyond the individual faults identified, the greatest opportunity for improvement is the implementation of proactive monitoring and alerting. Automated detection of missing telemetry, gateway outages, firmware non-compliance and power-related issues would significantly reduce operational risk and improve long-term network reliability.
