@@ -114,4 +114,383 @@ Benefits include:
 
 - Increased packet reception probability.
 - Improved resilience during gateway outages.
-- Reduced risk of coverage
+- Reduced risk of coverage gaps.
+- Better support for mobile GPS collars.
+
+---
+
+## Backhaul Connectivity
+
+### Primary Backhaul
+
+**4G Cellular Connectivity**
+
+The scenario notes that usable 4G coverage exists on the ridge. Cellular connectivity therefore offers the best balance between reliability, cost and operational complexity.
+
+### Data Flow
+
+```text
+Sensors
+    ↓
+LoRaWAN
+    ↓
+Gateways
+    ↓
+4G Cellular
+    ↓
+Tech Hub
+    ↓
+NS Analytics
+```
+
+### Connectivity Failure Handling
+
+When cellular connectivity becomes unavailable:
+
+1. Gateways continue receiving sensor traffic.
+2. Data is stored locally in gateway buffers.
+3. Once connectivity returns, queued messages are forwarded automatically.
+4. Monitoring alerts are generated when connectivity loss exceeds defined thresholds.
+
+This store-and-forward approach prevents data loss during temporary carrier outages.
+
+Because mobile coverage is known to be patchy within the conservancy, gateways should be configured to retain several days of telemetry locally. This ensures that temporary backhaul outages do not result in permanent data loss.
+
+### Gateway Power Systems
+
+Unlike field sensor nodes, gateways operate continuously and support cellular communications.
+
+For each gateway installation I would deploy:
+
+- 50-100 W solar panel
+- 40-100 Ah battery bank
+- MPPT charge controller
+
+This provides sufficient capacity to maintain operation throughout extended periods of poor weather.
+
+---
+
+# 3. Power Budget for a Remote LoRaWAN Node
+
+## Assumptions
+
+Example soil moisture node:
+
+| State | Current | Duration |
+|---------|---------|---------|
+| Sleep | 0.05 mA | 23.95 h/day |
+| Sensor Reading | 15 mA | 20 s/day |
+| LoRa Transmission | 120 mA | 30 s/day |
+
+### Daily Consumption
+
+Sleep:
+
+```text
+0.05 mA × 23.95 h
+= 1.20 mAh
+```
+
+Sensor Operation:
+
+```text
+15 mA × (20 ÷ 3600)
+= 0.08 mAh
+```
+
+Transmission:
+
+```text
+120 mA × (30 ÷ 3600)
+= 1.00 mAh
+```
+
+Base Consumption:
+
+```text
+≈ 2.3 mAh/day
+```
+
+To account for battery ageing, temperature effects, charging inefficiencies, seasonal variations in solar generation and operational uncertainty, I would apply a conservative engineering safety factor and size the system for:
+
+```text
+40 mAh/day
+```
+
+---
+
+## Battery Sizing
+
+### Required Autonomy
+
+Design target:
+
+```text
+5 consecutive cloudy days
+```
+
+Minimum capacity:
+
+```text
+40 mAh/day × 5 days
+= 200 mAh
+```
+
+Environmental monitoring systems should be intentionally oversized to provide adequate operational margin.
+
+### Recommended Battery
+
+For a typical soil moisture monitoring node:
+
+**6 Ah LiFePO₄ rechargeable battery**
+
+This provides substantial reserve capacity while remaining lightweight, compact and suitable for long-term field deployment.
+
+---
+
+## Solar Panel Sizing
+
+### Assumptions
+
+- Approximately 4 peak sun hours per day.
+- Charging and conversion losses.
+- Multiple cloudy days annually.
+- Long-term battery degradation.
+
+### Recommended Solar Panel
+
+**5 W solar panel**
+
+A 5 W panel provides significantly more energy than the node consumes under normal operating conditions and enables rapid battery recovery following poor weather.
+
+### Node Power System Summary
+
+| Component | Specification |
+|------------|---------------|
+| Solar Panel | 5 W |
+| Battery | 6 Ah LiFePO₄ |
+| Charge Controller | Integrated low-power controller |
+| Autonomy Target | ≥ 5 days |
+
+---
+
+# 4. Data Platform Architecture
+
+## Network Architecture Diagram
+
+```text
+┌──────────────────────────────────────────────┐
+│            LAIKIPIA CONSERVANCY              │
+│                 (~30 km²)                    │
+└──────────────────────────────────────────────┘
+
+ Soil Moisture      Weather        Water Level
+ Sensors (12)    Stations (3)      Sensors (2)
+       │               │                │
+       └───────┬───────┴───────┬────────┘
+               │               │
+
+         GPS Collars (20)
+               │
+               ▼
+
+         ┌─────────────┐
+         │   LoRaWAN   │
+         └─────────────┘
+               │
+      ┌────────┴────────┐
+      ▼                 ▼
+
+┌──────────────┐  ┌──────────────┐
+│ Gateway 1    │  │ Gateway 2    │
+│ Western Ridge│  │ Eastern Ridge│
+│ Solar Power  │  │ Solar Power  │
+└──────┬───────┘  └──────┬───────┘
+       │                 │
+       └───────┬─────────┘
+               ▼
+
+         4G Cellular
+               │
+               ▼
+
+┌────────────────────────────────┐
+│           TECH HUB              │
+├────────────────────────────────┤
+│ ChirpStack                     │
+│ Mosquitto MQTT                 │
+│ PostgreSQL                     │
+│ Grafana                        │
+│ Prometheus                     │
+│ Alertmanager                   │
+└────────────────────────────────┘
+               │
+               ▼
+
+┌────────────────────────────────┐
+│          NS Analytics          │
+└────────────────────────────────┘
+```
+
+## Platform Components
+
+### ChirpStack
+
+Provides:
+
+- LoRaWAN network server functionality
+- Device provisioning
+- Packet deduplication
+- Device management
+
+### Mosquitto MQTT
+
+Provides:
+
+- Reliable message transport
+- Integration between platform components
+
+### PostgreSQL
+
+Provides:
+
+- Long-term data retention
+- Reporting and analytics support
+
+### Grafana
+
+Provides:
+
+- Dashboards
+- Operational visibility
+- Historical trend analysis
+
+### Prometheus and Alertmanager
+
+Provides:
+
+- Infrastructure monitoring
+- Device monitoring
+- Automated alerts and notifications
+
+## NS Analytics Integration
+
+Processed data would be forwarded from PostgreSQL and MQTT services to NS Analytics through secure APIs.
+
+The platform should maintain at least one year of historical data before archival.
+
+---
+
+# 5. Device Management and Field Operations
+
+## Asset Register
+
+Every device should have a record containing:
+
+- Device ID
+- Device type
+- Serial number
+- GPS coordinates
+- Installation date
+- Firmware version
+- Gateway assignment
+- Maintenance history
+- Warranty information
+- Operational status
+
+I would store this information within PostgreSQL or an asset management platform such as Snipe-IT.
+
+---
+
+## Routine Field Checks
+
+Field technicians should verify:
+
+- Solar panel cleanliness
+- Battery voltage and charging trends
+- Charge controller status
+- Antenna condition
+- Enclosure integrity
+- Mounting stability
+- Firmware version compliance
+- Recent telemetry reception
+- Gateway connectivity status
+
+Routine inspections should occur monthly and immediately following major storms or wildlife-related incidents.
+
+---
+
+# 6. Equipment Costs and Risk Management
+
+## Approximate Equipment Costs
+
+| Item | Qty | Estimated Cost (USD) |
+|--------|-----|-----|
+| Soil moisture sensors (including node power systems) | 12 | $3,600 |
+| Weather stations | 3 | $2,400 |
+| Water level sensors | 2 | $1,000 |
+| GPS collars | 20 | $5,000 |
+| LoRaWAN gateways | 2 | $3,000 |
+| Gateway solar systems (panels, batteries and controllers) | 2 | $1,500 |
+| Mounting hardware and protective enclosures | - | $1,000 |
+| Servers and networking | - | $4,000 |
+
+**Estimated Total:** ~$21,500
+
+*Figures are planning estimates and would be refined during procurement.*
+
+---
+
+## Key Risks and Mitigations
+
+| Risk | Mitigation |
+|--------|-----------|
+| Wildlife damage | Steel mounts, protective enclosures and wildlife-resistant installations |
+| Theft | Tamper-resistant installations, asset tagging and GPS-recorded inventory |
+| Lightning | Surge protection, grounding and proper mast design |
+| Power failure | Appropriately sized solar systems, minimum five-day battery autonomy and battery health monitoring |
+| Cellular outages | Local buffering, automatic retransmission and gateway connectivity alerts |
+| Hardware failure | Spare equipment stock, firmware management and automated monitoring alerts |
+
+---
+
+# 7. Field Team Organisation and Supplier Management
+
+## Technician Responsibilities
+
+Field technicians should be assigned defined inspection routes and preventative maintenance schedules.
+
+Responsibilities include:
+
+- Routine inspections
+- Device replacements
+- Battery testing
+- Firmware upgrades
+- Fault verification
+- Incident response
+
+A ticketing system should be used to record faults, corrective actions and maintenance history.
+
+---
+
+## Managing Repeated Supplier Failures
+
+If a supplier's equipment repeatedly failed in the field:
+
+1. Record all incidents.
+2. Calculate failure rates by model and firmware version.
+3. Escalate findings to the supplier.
+4. Request root-cause analysis and corrective actions.
+5. Compare performance against alternative vendors.
+6. Pilot replacement devices in the field.
+7. Update procurement standards if reliability remains unacceptable.
+
+Procurement decisions should be driven by measured field performance rather than manufacturer specifications alone.
+
+---
+
+# Conclusion
+
+This design provides a cost-effective and operationally practical monitoring network for a remote conservancy environment. The combination of LoRaWAN, solar-powered infrastructure, overlapping gateway coverage, local buffering and automated monitoring provides resilience against common field challenges including power interruptions, wildlife damage and connectivity outages.
+
+The proposed architecture is scalable, based on proven open-source technologies and can be maintained by a small field operations team while meeting the conservancy's requirements for near-real-time visibility and long-term data retention.
