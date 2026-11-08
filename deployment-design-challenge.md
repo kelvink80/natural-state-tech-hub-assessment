@@ -276,108 +276,17 @@ A 5 W panel provides significantly more energy than the node consumes under norm
 
 # 4. Data Platform Architecture
 
-## Network Architecture Diagram
+## Network Architecture
 
-```text
-┌──────────────────────────────────────────────┐
-│            LAIKIPIA CONSERVANCY              │
-│                 (~30 km²)                    │
-└──────────────────────────────────────────────┘
+A network architecture diagram is provided in the `diagrams` folder as a supporting artefact.
 
- Soil Moisture      Weather        Water Level
- Sensors (12)    Stations (3)      Sensors (2)
-       │               │                │
-       └───────┬───────┴───────┬────────┘
-               │               │
+The architecture consists of:
 
-         GPS Collars (20)
-               │
-               ▼
-
-         ┌─────────────┐
-         │   LoRaWAN   │
-         └─────────────┘
-               │
-      ┌────────┴────────┐
-      ▼                 ▼
-
-┌──────────────┐  ┌──────────────┐
-│ Gateway 1    │  │ Gateway 2    │
-│ Western Ridge│  │ Eastern Ridge│
-│ Solar Power  │  │ Solar Power  │
-└──────┬───────┘  └──────┬───────┘
-       │                 │
-       └───────┬─────────┘
-               ▼
-
-         4G Cellular
-               │
-               ▼
-
-┌────────────────────────────────┐
-│           TECH HUB              │
-├────────────────────────────────┤
-│ ChirpStack                     │
-│ Mosquitto MQTT                 │
-│ PostgreSQL                     │
-│ Grafana                        │
-│ Prometheus                     │
-│ Alertmanager                   │
-└────────────────────────────────┘
-               │
-               ▼
-
-┌────────────────────────────────┐
-│          NS Analytics          │
-└────────────────────────────────┘
-```
-
-## Platform Components
-
-### ChirpStack
-
-Provides:
-
-- LoRaWAN network server functionality
-- Device provisioning
-- Packet deduplication
-- Device management
-
-### Mosquitto MQTT
-
-Provides:
-
-- Reliable message transport
-- Integration between platform components
-
-### PostgreSQL
-
-Provides:
-
-- Long-term data retention
-- Reporting and analytics support
-
-### Grafana
-
-Provides:
-
-- Dashboards
-- Operational visibility
-- Historical trend analysis
-
-### Prometheus and Alertmanager
-
-Provides:
-
-- Infrastructure monitoring
-- Device monitoring
-- Automated alerts and notifications
-
-## NS Analytics Integration
-
-Processed data would be forwarded from PostgreSQL and MQTT services to NS Analytics through secure APIs.
-
-The platform should maintain at least one year of historical data before archival.
+- LoRaWAN field sensors and GPS collars
+- Two ridge-mounted gateways with overlapping coverage
+- Cellular backhaul to the Tech Hub
+- ChirpStack, MQTT and PostgreSQL services hosted at the Tech Hub
+- Integration with NS Analytics through secure APIs
 
 ---
 
