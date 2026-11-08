@@ -1,76 +1,122 @@
-# Sensor Network Challenge: data files
+# Natural State Tech Hub Manager Assessment
 
-Six weeks of data, **2026-03-02 to 2026-04-12**, from a small LoRaWAN field network.
-The data is synthetic, built from realistic patterns. It does not describe any real
-installation, and the coordinates do not match any real device.
+Author: Kelvin Kimani Kinyanjui
 
-| File | Rows | Granularity |
-|---|---|---|
-| `devices.csv` | 21 | One row per gateway and sensor |
-| `telemetry.csv` | ~64,800 | One row per message **per receiving gateway** |
-| `gateway_status.csv` | 2,016 | One row per gateway per hour |
-| `maintenance_log.csv` | 13 | One row per field visit and device |
+## Overview
 
-All timestamps are ISO 8601 in **UTC**. Local time on site is UTC+3 (EAT). Empty cells mean
-the value does not apply or was not reported.
+This repository contains my submission for the Natural State Tech Hub Manager take-home assessment.
 
-## devices.csv
+The assessment consists of:
 
-| Column | Meaning |
-|---|---|
-| `device_id` | Device identifier (`GW-` gateway, `SM-` soil moisture, `WS-` weather, `WL-` water level, `C-` GPS collar) |
-| `device_type` | `gateway`, `soil_moisture`, `weather`, `water_level`, `gps_collar` |
-| `model`, `firmware_version` | As recorded in the register |
-| `install_date` | Date the device was installed |
-| `latitude`, `longitude` | Installed location (WGS84). For collars, the herd's night boma |
-| `location_description` | Free text |
-| `expected_gateway` | The gateway this device is expected to use |
+1. Sensor Network Challenge
+2. Deployment Design Challenge
 
-## telemetry.csv
+My approach focused on:
 
-| Column | Unit | Meaning |
-|---|---|---|
-| `timestamp` | UTC | Measurement time reported in the message |
-| `device_id` | | Sending device |
-| `gateway_id` | | Gateway that received the message |
-| `message_counter` | | Uplink frame counter. Increases by one for every message the device **sends** |
-| `battery_v` | V | Device battery voltage |
-| `solar_current_ma` | mA | Charging current from the device's solar panel |
-| `rssi_dbm`, `snr_db` | dBm, dB | Signal strength and signal-to-noise ratio at the receiving gateway |
-| `soil_moisture_pct` | % VWC | Soil moisture (soil nodes) |
-| `temperature_c` | °C | Soil temperature for soil nodes, air temperature for weather stations |
-| `rainfall_mm` | mm | Rain since the previous message (weather stations) |
-| `water_level_cm` | cm | Water depth at the sensor (water level sensors) |
-| `latitude`, `longitude` | WGS84 | Position fix (collars only) |
+- Identifying operational issues from telemetry and infrastructure data.
+- Distinguishing device failures from gateway and connectivity issues.
+- Prioritising field interventions.
+- Designing a scalable monitoring network for a remote conservation environment.
+- Proposing monitoring, maintenance and operational improvements.
 
-Soil, weather and water level sensors are meant to report every 15 minutes. Collars report
-every hour.
+---
 
-## gateway_status.csv
+## Repository Contents
 
-| Column | Meaning |
-|---|---|
-| `timestamp` | Start of the hour (UTC) |
-| `status` | `online` if the gateway was running during the hour, `offline` if not |
-| `uptime_s` | Seconds since the gateway last booted, at the end of the hour |
-| `backhaul`, `backhaul_type` | Whether the gateway could reach the network server, and how |
-| `cellular_rssi_dbm` | Cellular signal at the gateway |
-| `battery_v` | Gateway battery voltage (12 V system) |
-| `messages_received` | LoRaWAN messages the gateway heard during the hour |
+| Document | Description |
+|-----------|-------------|
+| [sensor-network-challenge.md](./sensor-network-challenge.md) | Investigation of telemetry, gateway status, maintenance records and operational findings. |
+| [deployment-design-challenge.md](./deployment-design-challenge.md) | Proposed network design for the Laikipia conservancy deployment. |
+| [ai-disclosure.md](./ai-disclosure.md) | Summary of AI tools used during the assessment. |
+| [investigation_notes.md](./investigation_notes.md) | Notes describing the investigation approach and analysis process. |
+| [Network Architecture Diagram](./diagrams/network-architecture.md) | Supporting architecture diagram illustrating data flow from field sensors to NS Analytics. |
 
-The hourly status comes from the network server, filled in from the gateway's local log
-when the backhaul was down.
+---
 
-## maintenance_log.csv
+## Sensor Network Challenge Summary
 
-| Column | Meaning |
-|---|---|
-| `date` | Date of the visit (local) |
-| `device_id` | Device the note refers to |
-| `action` | What the field team wrote |
+The investigation identified:
 
+- A probable failure of soil moisture sensor SM-03.
+- A prolonged outage affecting SM-08 following physical disruption.
+- Legacy firmware and non-standard reporting intervals on SM-05 and SM-07.
+- A confirmed gateway reboot event on GW-02.
+- Connectivity instability affecting GW-01.
+- Opportunities to improve monitoring, alerting and operational visibility.
 
-Data
+Recommended improvements include proactive monitoring for:
+
+- Missing telemetry
+- Gateway outages
+- Connectivity failures
+- Firmware compliance
+- Battery health
+- Sensor anomalies
+
+---
+
+## Deployment Design Challenge Summary
+
+The proposed solution uses:
+
+- LoRaWAN for field communications
+- Ridge-mounted gateways with overlapping coverage
+- Solar-powered infrastructure
+- Cellular backhaul
+- ChirpStack LoRaWAN Network Server
+- Mosquitto MQTT
+- PostgreSQL
+- Grafana
+- Prometheus and Alertmanager
+- Integration with NS Analytics
+
+The design emphasises reliability, maintainability, scalability and cost-effectiveness while meeting the requirement for near-real-time data delivery and one-year retention.
+
+---
+
+## Data
+
 The datasets used for this analysis were supplied as part of the assessment package and are not included in this repository.
 
-All findings and recommendations were derived from the provided assessment data.
+All findings and recommendations were derived from the supplied assessment data.
+
+---
+
+## AI Usage
+
+AI tools were used to:
+
+- Review assignment requirements.
+- Discuss potential investigation approaches.
+- Improve document structure and readability.
+- Challenge assumptions and validate reasoning.
+
+All conclusions, recommendations and design decisions were reviewedt
+natural-state-tech-hub-assessment/
+
+README.md
+
+sensor-network-challenge.md
+
+deployment-design-challenge.md
+
+ai-disclosure.md
+
+investigation_notes.md
+
+diagrams/ network-architecture.md
+```
+
+---
+
+## Final Note
+
+My focus throughout the assessment was not only on identifying technical issues, but also on demonstrating how I would operate, maintain and improve a production environmental monitoring network in a remote conservation setting.
+
+The recommendations therefore prioritise:
+
+- Reliability
+- Observability
+- Maintainability
+- Scalability
+- Practical field operations
