@@ -68,3 +68,9 @@ when the backhaul was down.
 | `date` | Date of the visit (local) |
 | `device_id` | Device the note refers to |
 | `action` | What the field team wrote |
+
+
+Data
+The datasets used for this analysis were supplied as part of the assessment package and are not included in this repository.
+
+All findings and recommendations were derived from the provided assessment data.
