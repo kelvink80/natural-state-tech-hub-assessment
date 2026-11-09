@@ -91,7 +91,8 @@ AI tools were used to:
 - Improve document structure and readability.
 - Challenge assumptions and validate reasoning.
 
-All conclusions, recommendations and design decisions were reviewedt
+All conclusions, recommendations and design decisions were reviewed
+
 natural-state-tech-hub-assessment/
 
 README.md
